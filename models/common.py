@@ -57,6 +57,24 @@ from utils.general import (
 from utils.torch_utils import copy_attr, smart_inference_mode
 
 
+class SENet(nn.Module):
+    def __init__(self, channel, reduction=16):
+        super(SENet, self).__init__()
+        self.avg_pool = nn.AdaptiveAvgPool2d(1)
+        self.fc = nn.Sequential(
+            nn.Linear(channel, channel // reduction, bias=False),
+            nn.ReLU(inplace=True),
+            nn.Linear(channel // reduction, channel, bias=False),
+            nn.Sigmoid()
+        )
+
+    def forward(self, x):
+        b, c, _, _ = x.size()
+        y = self.avg_pool(x).view(b, c)
+        y = self.fc(y).view(b, c, 1, 1)
+        return x * y.expand_as(x)
+
+
 def autopad(k, p=None, d=1):
     """
     Pads kernel to 'same' output shape, adjusting for optional dilation; returns padding size.
@@ -436,9 +454,9 @@ class Expand(nn.Module):
         """
         b, c, h, w = x.size()  # assert C / s ** 2 == 0, 'Indivisible gain'
         s = self.gain
-        x = x.view(b, s, s, c // s**2, h, w)  # x(1,2,2,16,80,80)
+        x = x.view(b, s, s, c // s ** 2, h, w)  # x(1,2,2,16,80,80)
         x = x.permute(0, 3, 4, 1, 5, 2).contiguous()  # x(1,16,80,2,80,2)
-        return x.view(b, c // s**2, h * s, w * s)  # x(1,16,160,160)
+        return x.view(b, c // s ** 2, h * s, w * s)  # x(1,16,160,160)
 
 
 class Concat(nn.Module):
@@ -1090,7 +1108,7 @@ class Classify(nn.Module):
     """YOLOv5 classification head with convolution, pooling, and dropout layers for channel transformation."""
 
     def __init__(
-        self, c1, c2, k=1, s=1, p=None, g=1, dropout_p=0.0
+            self, c1, c2, k=1, s=1, p=None, g=1, dropout_p=0.0
     ):  # ch_in, ch_out, kernel, stride, padding, groups, dropout probability
         """Initializes YOLOv5 classification head with convolution, pooling, and dropout layers for input to output
         channel transformation.

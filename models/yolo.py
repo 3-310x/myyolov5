@@ -26,6 +26,7 @@ if platform.system() != "Windows":
     ROOT = Path(os.path.relpath(ROOT, Path.cwd()))  # relative
 
 from models.common import (
+    SENet,
     C3,
     C3SPP,
     C3TR,
@@ -402,6 +403,7 @@ def parse_model(d, ch):
 
         n = n_ = max(round(n * gd), 1) if n > 1 else n  # depth gain
         if m in {
+            SENet,
             Conv,
             GhostConv,
             Bottleneck,
