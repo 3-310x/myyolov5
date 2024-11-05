@@ -1,0 +1,13 @@
+train: D:/project/yolov5/shapes/train/images
+val: D:/project/yolov5/shapes/valid/images
+test: D:/project/yolov5/shapes/test/images
+
+nc: 9
+names: ['circle', 'heptagon', 'hexagon', 'nonagon', 'octagon', 'pentagon', 'square', 'star', 'triangle']
+
+roboflow:
+  workspace: shapedetection-w5my0
+  project: 2d-shapes-object-detection
+  version: 10
+  license: CC BY 4.0
+  url: https://universe.roboflow.com/shapedetection-w5my0/2d-shapes-object-detection/dataset/10

@@ -21,8 +21,6 @@ async def predict(file: UploadFile = File(...)):
     try:
         # 将上传的文件读取为字节流
         image_data = await file.read()
-
-        # 使用 PIL.Image 打开图片
         image = Image.open(io.BytesIO(image_data))
 
         # 将 PIL 图片转换为 OpenCV 格式
@@ -51,18 +49,17 @@ async def predict(file: UploadFile = File(...)):
 
                 # 在图像上绘制边界框和标签
                 cv2.rectangle(image_cv2, (int(x1), int(y1)), (int(x2), int(y2)), (0, 255, 0), 2)
-                cv2.putText(image_cv2, f'{class_name} {confidence:.2f}', (int(x1), int(y1) - 10),
-                            cv2.FONT_HERSHEY_SIMPLEX, 0.9, (0, 255, 0), 2)
+                cv2.putText(image_cv2, f'{class_name} {confidence:.2f}', (int(x1), int(y1) - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (0, 255, 0), 2)
 
         # 将标注后的图片保存到文件
-        output_path = "annotated_image.jpg"
+        output_path = "person.jpg"
         cv2.imwrite(output_path, image_cv2)
 
         # 返回检测结果和标签数量，并提供图片下载链接
         return {
             "detections": parsed_detections,
             "label_counts": label_counts,  # 返回标签和对应的数量
-            "annotated_image_url": f"http://localhost:8510/download/{output_path}"  # 返回标注图像的下载 URL
+            "annotated_image_url": f"http://192.168.10.4:8510/download/{output_path}"  # 返回标注图像的下载 URL
         }
 
     except Exception as e:
@@ -112,14 +109,15 @@ async def predict(file: UploadFile = File(...)):
             cv2.putText(image_cv2, f'{class_name} {confidence:.2f}', (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.9,
                         (0, 255, 0), 2)
         # 将标注后的图片保存到文件
-        output_path = "annotated_image.jpg"
-        cv2.imwrite(output_path, image_cv2)
+        output_path = "fire_image.jpg"
+        if label_counts["fire"] >= 1:
+            cv2.imwrite(output_path, image_cv2)
 
         # 返回检测结果和图片下载链接
         return {
             "detections": parsed_detections,
             "label_counts": label_counts,
-            "annotated_image_url": f"http://192.168.10.9:8510/download/{output_path}"
+            "annotated_image_url": f"http://192.168.10.4:8510/download/{output_path}"
         }
 
     except Exception as e:

@@ -1,0 +1,5 @@
+train: D:/AutoTrain/pt22/data/aug_data\train/images
+val: D:/AutoTrain/pt22/data/aug_data\valid/images
+nc: 1
+names:
+- person

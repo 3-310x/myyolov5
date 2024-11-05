@@ -1,0 +1,13 @@
+train: D:/project/yolov5/sampleSAEshapes/train/images
+val: D:/project/yolov5/sampleSAEshapes/valid/images
+test: D:/project/yolov5/sampleSAEshapes/test/images
+
+nc: 6
+names: ['circle', 'hexagon', 'pentagon', 'square', 'triangle','star']
+
+roboflow:
+  workspace: asrl
+  project: samplesaeshapes
+  version: 1
+  license: CC BY 4.0
+  url: https://universe.roboflow.com/asrl/samplesaeshapes/dataset/1
