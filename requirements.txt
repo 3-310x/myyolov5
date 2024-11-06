@@ -49,5 +49,5 @@ setuptools>=70.0.0 # Snyk vulnerability fix
 # pycocotools>=2.0.6  # COCO mAP
 
 yaml~=0.2.5
-tensorflow~=2.13.0
+tensorflow~=2.18.0
 fastapi~=0.112.2
