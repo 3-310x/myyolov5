@@ -50,4 +50,4 @@ setuptools>=70.0.0 # Snyk vulnerability fix
 
 yaml~=0.2.5
 tensorflow~=2.13.0
-fastapi~=0.112.2
+fastapi~=0.115.5
